@@ -19,12 +19,10 @@ if (Meteor.isServer) {
 Meteor.methods({
   'tasks.insert'(text) {
     check(text, String)
-
     // Make sure the user is logged in before inserting a task
     if (! this.userId) {
       throw new Meteor.Error('not-authorized')
     }
-
     Tasks.insert({
       text,
       createdAt: new Date(),
@@ -54,14 +52,11 @@ Meteor.methods({
   'tasks.setPrivate'(taskId, setToPrivate) {
     check(taskId, String)
     check(setToPrivate, Boolean)
-
     const task = Tasks.findOne(taskId)
-
     // Make sure only the task owner can make a task private
     if (task.owner !== this.userId) {
       throw new Meteor.Error('not-authorized')
     }
-
     Tasks.update(taskId, { $set: { private: setToPrivate } })
   },
 })
