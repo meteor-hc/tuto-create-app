@@ -3,13 +3,11 @@ import { Tasks } from '../api/tasks.js'
 import './task.html'
 
 Template.task.events({
-  'click .toggle-checked'() {
+  'click .toggle-checked'(e, instance) {
     // Set the checked property to the opposite of its current value
-    Tasks.update(this._id, {
-      $set: { checked: ! this.checked },
-    })
+    Meteor.call('tasks.setChecked', instance.data._id, !instance.data.checked)
   },
-  'click .delete'() {
-    Tasks.remove(this._id)
+  'click .delete'(e, instance) {
+    Meteor.call('tasks.remove', instance.data._id)
   },
 })
